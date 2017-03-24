@@ -7,10 +7,22 @@
 #define CPP_CONFIG_H_
 
 #include <string>
+#include <vector>
 #include <unordered_map>
 #include <fstream>
+#include <sstream>
+#include <cassert>
 
 using std::string;
+using std::vector;
+
+void split(const string& str, char delim, vector<string>* value) {
+  std::stringstream ss;
+  ss.str(str);
+  string item;
+  while(std::getline(ss, item, delim)) 
+    value->push_back(item);
+}
 
 class Config {
  public:
@@ -71,6 +83,30 @@ class Config {
     if (out) *value = std::stoull(data_[item]);
     return out;
   }
+  bool Parse(const string& item, bool* value) {
+    bool out = ValidItem(item);
+    if (out) *value = (data_[item] == "true" || data_[item] == "True");
+    return out;
+  }
+  bool Parse(const string& item, vector<string>* value) {
+    bool out = ValidItem(item);
+    if (out) {
+      value->clear();
+      split(data_[item], ',', value);
+    }
+    return out;
+  }
+  bool Parse(const string& item, vector<int>* value) {
+    vector<string> vs;
+    bool out = Parse(item, &vs);
+    if (out) {
+      value->clear();
+      for (auto& v : vs) {
+        value->push_back(stoi(v));
+      }
+    }
+    return out;
+  }
   bool ValidItem(const string& item) {
     return data_.find(item) != data_.end();
   }
@@ -85,10 +121,10 @@ class Config {
   // TODO: adding arbitrary type parser by implenment template<T> stox
   
  private:
-  Config();
-  Config(Config const&);
+  Config() {}
+  Config(Config const&); 
   Config& operator=(Config const&);
-  ~Config();
+  ~Config() {}
   std::unordered_map<string, string> data_;
 };
 

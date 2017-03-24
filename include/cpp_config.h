@@ -107,6 +107,9 @@ class Config {
     }
     return out;
   }
+  void Set(const string& item, const string& value) {
+    data_[item] = value;
+  }
   bool ValidItem(const string& item) {
     return data_.find(item) != data_.end();
   }

@@ -19,5 +19,7 @@ int main() {
   assert(ss[0] == "a"); assert(ss[1] == "b");
   assert(ss[2] == "c"); assert(ss[3] == "d");
   std::cout << Config::Instance().ListAll();  
+  Config::Instance().Set("ss", "a,c,b,d");
+  std::cout << Config::Instance().ListAll();  
   return 0;
 }

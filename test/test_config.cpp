@@ -3,7 +3,8 @@
 #include <cmath>
 
 int main() {
-  Config::Instance().LoadConfig("config");
+  assert(Config::Instance().LoadConfig("not_avaliable") == false);
+  assert(Config::Instance().LoadConfig("config") == true);
   int i; Config::Instance().Parse("i", &i);
   float f; Config::Instance().Parse("f", &f);
   vector<int> is; Config::Instance().Parse("is", &is);

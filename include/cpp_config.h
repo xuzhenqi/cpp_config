@@ -16,7 +16,7 @@
 using std::string;
 using std::vector;
 
-void split(const string& str, char delim, vector<string>* value) {
+inline void split(const string& str, char delim, vector<string>* value) {
   std::stringstream ss;
   ss.str(str);
   string item;
@@ -31,12 +31,14 @@ class Config {
     return config;
   }
 
-  void LoadConfig(const string& filename) {
+  bool LoadConfig(const string& filename) {
     std::ifstream in(filename);
+    if (!in.is_open()) return false;
     string item, value;
     while(in >> item >> value) {
       data_[item] = value;
     }
+    return true;
   }
   bool Parse(const string& item, string* value) {
     bool out = ValidItem(item);
